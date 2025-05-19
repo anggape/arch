@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: build pacman repository
+        uses: ./
+
+      - name: prepare release
+        id: prepare
+        run: ./scripts/create_tag.sh
+
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          makeLatest: true
+          artifacts: output/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.prepare.outputs.RELEASE_TAG }}
