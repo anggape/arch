@@ -1,0 +1,62 @@
+# Maintainer: Angga Permana <anggape.dev@gmail.com>
+
+pkgname=eww
+pkgver=0.6.0
+pkgrel=1
+pkgdesc="Standalone widget system made in Rust"
+url="https://github.com/elkowar/eww"
+arch=(
+  "x86_64"
+)
+license=(
+  "MIT"
+)
+makedepends=(
+  "cargo"
+)
+depends=(
+  "gtk3"
+  "gtk-layer-shell"
+  "libdbusmenu-gtk3"
+)
+source=(
+  "$url/archive/refs/tags/v$pkgver.tar.gz"
+  "https://github.com/NixOS/nixpkgs/raw/8b14399f/pkgs/by-name/ew/eww/lockfile.patch"
+)
+sha256sums=(
+  "cef361946946c566b79f8ddc6208d1a3f16b4ff9961439a3f86935e1cfa174a1"
+  "67438facd263bca2ced267336a8ec2f56705f4c381383c93abbdb356f02897fe"
+)
+
+prepare() {
+  patch                              \
+    --directory="$pkgname-$pkgver"   \
+    --forward                        \
+    --strip=1                        \
+    --input="$srcdir/lockfile.patch"
+  cargo fetch                                                            \
+    --manifest-path="$pkgname-$pkgver/Cargo.toml"                        \
+    --target "$(rustc --version --verbose | sed --silent 's/host: //p')" \
+    --locked
+}
+
+build() {
+  cargo build                                     \
+    --manifest-path="$pkgname-$pkgver/Cargo.toml" \
+    --offline                                     \
+    --locked                                      \
+    --release
+}
+
+package() {
+  install -D "$pkgname-$pkgver/LICENSE"                       \
+    --mode=644                                                \
+    --target-directory="$pkgdir/usr/share/licenses/$pkgname/"
+  install -D "$pkgname-$pkgver/target/release/$pkgname" \
+    --mode=755                                          \
+    --target-directory="$pkgdir/usr/bin/"
+  install --directory "$pkgdir/usr/share/doc/$pkgname/examples"
+  cp --archive                                \
+    "$pkgname-$pkgver/examples/eww-bar"       \
+    "$pkgdir/usr/share/doc/$pkgname/examples"
+}
