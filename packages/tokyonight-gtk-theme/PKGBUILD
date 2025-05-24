@@ -1,0 +1,52 @@
+# Maintainer: Angga Permana <anggape.dev@gmail.com>
+
+_githash="006154c78dde52b5851347a7e91f924af62f1b8f"
+pkgbase="tokyonight-gtk-theme"
+pkgname=(
+  "tokyonight-dark-gtk-theme"
+  "tokyonight-light-gtk-theme"
+)
+pkgver=20250425
+pkgrel=1
+url="https://github.com/fausto-korpsvart/tokyonight-gtk-theme"
+arch=(
+  "any"
+)
+license=(
+  "GPL3"
+)
+makedepends=(
+  "sassc"
+)
+source=(
+  "https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme/archive/$_githash.tar.gz"
+)
+sha256sums=(
+  "c0577205e8a4c00554e1de90ea0c8cd2741260437b4302eacef2ee5639cb4d7b"
+)
+options=(
+  !strip
+  !debug
+)
+
+build() {
+  cd "$srcdir/Tokyonight-GTK-Theme-$_githash/themes"
+  mkdir --parents "$srcdir/output"
+  ./install.sh --dest $_
+}
+
+_package() {
+  for theme in $(find $srcdir/output -name "$2" -type d); do
+    local theme_name="$(basename $theme)"
+    install --directory "$1/usr/share/themes/$theme_name"
+    cp --archive $theme/* $_
+  done
+}
+
+package_tokyonight-dark-gtk-theme() {
+  _package "$pkgdir" 'Tokyonight-Dark*'
+}
+
+package_tokyonight-light-gtk-theme() {
+  _package "$pkgdir" 'Tokyonight-Light*'
+}
