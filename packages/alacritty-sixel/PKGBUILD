@@ -3,8 +3,8 @@
 _realpkgname="alacritty"
 pkgname="alacritty-sixel"
 pkgdesc="A cross-platform, GPU-accelerated terminal emulator (Sixel Fork)"
-pkgver=0.15.1
-pkgrel=2
+pkgver=0.16.1
+pkgrel=1
 arch=("x86_64")
 url="https://github.com/ayosec/alacritty"
 license=(
@@ -40,7 +40,7 @@ source=(
   "$url/archive/refs/tags/v$pkgver-graphics.tar.gz"
 )
 sha256sums=(
-  "c9faa9b5c60d50b42b05e381242418b87d90e7829b8d3ddb2e17ed71479df861"
+  "2b0b88ea868daf9282a8a77d7dd5cd2f787f3227cd4281bd6a171d811057e096"
 )
 provides=(
   $_realpkgname
