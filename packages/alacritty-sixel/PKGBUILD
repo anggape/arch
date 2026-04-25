@@ -40,7 +40,7 @@ source=(
   "$url/archive/refs/tags/v$pkgver-graphics.tar.gz"
 )
 sha256sums=(
-  "2b0b88ea868daf9282a8a77d7dd5cd2f787f3227cd4281bd6a171d811057e096"
+  "6a0da03b29e33f392009c109666680fd04340f9e25309e7e6fcd10f5e82f370a"
 )
 provides=(
   $_realpkgname
